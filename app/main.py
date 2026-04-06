@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import logistics
+from .routers import logistics, finance
 
 app = FastAPI(
-    title="Quantum Logistics API",
-    description="Backend service for Quantum Logistics Demo",
+    title="Quantum Solutions API",
+    description="Backend service for Quantum Logistics and Finance Demo",
     version="1.0.0"
 )
 
@@ -18,7 +18,8 @@ app.add_middleware(
 )
 
 app.include_router(logistics.router, prefix="/api/v1")
+app.include_router(finance.router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():
-    return {"status": "ok", "message": "Quantum Logistics API is running"}
+    return {"status": "ok", "message": "Quantum Solutions API is running"}

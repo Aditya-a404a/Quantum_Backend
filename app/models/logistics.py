@@ -18,6 +18,7 @@ class RouteSequence(BaseModel):
     vehicle_id: Union[str, int]
     path: List[Union[str, int]]  # Sequence of location IDs
     distance: Optional[float] = None
+    duration: Optional[float] = None
 
 class RoutingResponse(BaseModel):
     noOfSteps: int = Field(..., description="Number of iterative steps taken by the algorithm")

@@ -6,3 +6,4 @@ networkx
 scikit-learn
 numpy
 scipy
+pandas
