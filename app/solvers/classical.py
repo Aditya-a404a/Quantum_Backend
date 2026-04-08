@@ -56,6 +56,9 @@ def solve_classical(
             True,  # start cumul to zero
             dimension_name,
         )
+        distance_dimension = routing.GetDimensionOrDie(dimension_name)
+        # Force the distribution across all trucks by minimizing the maximum route distance
+        distance_dimension.SetGlobalSpanCostCoefficient(100)
 
         search_parameters = pywrapcp.DefaultRoutingSearchParameters()
         search_parameters.first_solution_strategy = (
