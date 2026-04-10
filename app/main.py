@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import logistics, finance
+from .routers import logistics, finance, logistics_v2
 
 app = FastAPI(
     title="Quantum Solutions API",
     description="Backend service for Quantum Logistics and Finance Demo",
-    version="1.0.0"
+    version="2.0.0"
 )
 
 # Configure CORS for frontend integration
@@ -19,6 +19,7 @@ app.add_middleware(
 
 app.include_router(logistics.router, prefix="/api/v1")
 app.include_router(finance.router, prefix="/api/v1")
+app.include_router(logistics_v2.router, prefix="/api/v2")
 
 @app.get("/")
 def read_root():
