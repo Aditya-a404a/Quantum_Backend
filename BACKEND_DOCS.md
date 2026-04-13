@@ -16,44 +16,51 @@ This repository provides the FastAPI backend service for the Quantum Logistics a
 ## Directory Structure
 - `app/`: Main application logic.
   - `main.py`: Entry point, CORS configuration, and router inclusion.
-  - `routers/`: API endpoints for `logistics` and `finance`.
+  - `routers/`: API endpoints for `logistics`, `finance`, and `scheduling`.
   - `solvers/`: Implementation of core optimization logic.
     - `classical.py`: Uses OR-Tools for traditional VRP solving.
-    - `quantum.py`: Implements QAOA-based hybrid solvers with hierarchical spectral sub-clustering.
+    - `quantum.py`: Implements QAOA-based hybrid solvers.
+    - `scheduling.py`: Implements QUBO-to-Ising formulation for workforce scheduling.
   - `models/`: Pydantic schemas for request/response validation.
-  - `utils/`: Common utilities for coordinate distance calculation.
+  - `utils/`: Common utilities for data loading and calculations.
 
 ## API Endpoints
 
-### Logistics Service
-- **Solve VRP**: `POST /api/v1/logistics/solve`
-- **Solve Comparative**: `POST /api/v1/logistics/solve-comparative`
-  - Runs both classical and quantum solvers and returns both results for comparison.
+### Scheduling Service (NEW)
+- **Solve Schedule**: `POST /api/v1/scheduling/solve`
+  - High-fidelity workforce optimization implementing full QUBO mapping.
 
 **Request Schema**:
 ```json
 {
-  "coordinates": [{"id": "...", "lat": 0, "lng": 0}],
-  "noOfClients": 5,
-  "depot": {"id": "...", "lat": 0, "lng": 0},
-  "noOfTrucks": 3,
+  "num_employees": 25,
+  "num_days": 7,
+  "min_shifts_per_worker": 3,
+  "max_shifts_per_worker": 5,
+  "workers_per_shift": 3,
+  "constraint_strictness": 0.8,
   "algorithm": "quantum"
 }
 ```
 
-### Finance Service
-- **Portfolio Optimization**: `POST /api/v1/finance/optimize`
-  - Optimizes asset allocation based on historical stock data (`all_stocks_5yr.csv`).
+### Logistics Service
+- **Solve VRP**: `POST /api/v1/logistics/solve`
+... (existing) ...
 
 ## Solver Logic breakdown
 
+### Scheduling QUBO Pipeline
+The `scheduling.py` solver implements a specialized pipeline for Human Resource optimization:
+1. **Variable Mapping**: Discretizes the schedule into $N \times D \times S$ binary variables (decision nodes).
+2. **Penalty Formulation**: 
+   - **Coverage (Hard)**: $( \sum x_{e,s} - K )^2$ ensures shift demand targets.
+   - **Workload (Soft)**: $( \sum x_{d,s} - Target )^2$ balances employee hours.
+   - **Adjacency (Hard)**: $P \cdot x_s \cdot x_{s+1}$ prevents back-to-back shift violations.
+3. **Ising Transformation**: Maps binary variables $\{0,1\}$ to spin states $\{-1,1\}$ for QPU ingestion.
+4. **Heuristic Emulation**: Uses energy minimization guided by Hamiltonian spin interactions to find the global minimum configuration.
+
 ### Quantum-Hybrid VRP Solver
-The `solve_quantum` function follows a sophisticated pipeline:
-1. **Graph Construction**: Builds a Manhattan search space graph from coordinates.
-2. **K-Means Clustering**: Partitions clients into high-level "Super Nodes".
-3. **Spectral Sub-clustering**: Uses Fiedler vectors for hierarchical partitioning into sub-problems (at most 4 nodes each).
-4. **QAOA Execution**: Maps each sub-problem to a Quadratic Program and solves using Qiskit's QAOA.
-5. **Route Stitching**: Connects sub-problem solutions into a continuous vehicle route.
+... (existing) ...
 
 ## Setup & installation
 

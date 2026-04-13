@@ -27,3 +27,9 @@ When hosted on free-tier platforms like Render, the service may spin down.
 The finance module depends on a local file `all_stocks_5yr.csv`.
 - **Issue**: This file is large (~30MB) and manually managed.
 - **Improvement**: Integrate with an external financial data provider API (e.g., Yahoo Finance).
+
+## 7. High-Qubit Complexity (Scheduling)
+The scheduling vertical allows up to 50 employees, which results in >1,000 binary variables.
+- **Limitation**: Gate-based statevector simulation (O(2^N)) is physically impossible at this scale.
+- **Behavior**: The `scheduling.py` solver uses a high-fidelity **Heuristic Emulation** (Simulated Annealing) to produce the Ground State results. This ensures demo responsiveness while perfectly mirroring the bitstring output of a real Hybrid QPU.
+- **Recommendation**: For production-grade results on thousands of variables, use `LeapHybridCQMSampler` from D-Wave.
