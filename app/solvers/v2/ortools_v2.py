@@ -93,7 +93,7 @@ def solve_vrp_ortools_v2(
         except:
             return v_id, {"sequence": seq, "total_distance": 0, "total_duration": 0, "geometry": None}
 
-    with ThreadPoolExecutor(max_workers=min(5, num_vehicles)) as executor:
+    with ThreadPoolExecutor(max_workers=min(2, num_vehicles)) as executor:
         results = list(executor.map(fetch_route_data, routes_to_fetch))
 
     final_routes = []
