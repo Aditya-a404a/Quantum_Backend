@@ -1,6 +1,7 @@
 import math
 import time
 from typing import List, Dict, Any
+import numpy as np
 
 try:
     from ortools.constraint_solver import pywrapcp
@@ -196,7 +197,6 @@ def solve_portfolio_classical(tickers: List[str], mean_returns: np.ndarray, cov_
     Blends Market Equilibrium with Momentum-based Views.
     """
     from scipy.optimize import minimize
-    import numpy as np
     import time
     
     start_time = time.time()

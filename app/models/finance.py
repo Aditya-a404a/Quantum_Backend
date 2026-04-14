@@ -21,6 +21,7 @@ class PortfolioResult(BaseModel):
     sharpeRatio: float
     computeTimeMs: int
     costImpact: float
+    pipeline_steps: Optional[List[str]] = None
 
 class TrajectoryPoint(BaseModel):
     date: str
