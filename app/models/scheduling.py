@@ -4,11 +4,8 @@ from typing import List, Dict, Any, Optional
 class SchedulingRequest(BaseModel):
     num_employees: int
     num_days: int
-    min_shifts_per_worker: int
-    max_shifts_per_worker: int
     workers_per_shift: int
-    constraint_strictness: float
-    algorithm: str = "quantum" # or "classical"
+    algorithm: str = "quantum" 
 
 class Shift(BaseModel):
     id: str

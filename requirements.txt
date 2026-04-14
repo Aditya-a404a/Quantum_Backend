@@ -8,3 +8,6 @@ numpy
 scipy
 pandas
 requests
+qiskit-optimization
+qiskit
+qiskit-algorithms
